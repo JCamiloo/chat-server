@@ -7,7 +7,7 @@ const createJWT = (uid) => {
       expiresIn: '24h'
     }, (error, token) => {
       if (error) {
-        reject('Can\'t generate token');
+        reject('No se pudo generar el token');
       } else {
         resolve(token);
       }
