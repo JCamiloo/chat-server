@@ -1,7 +1,7 @@
-const { response } = require("express");
+const { response } = require('express');
+const { createJWT } = require('../helpers/jwt');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
-const { createJWT } = require('../helpers/jwt');
 
 const createUser = async (req, res = response) => {
   const { email, password } = req.body;
@@ -12,7 +12,7 @@ const createUser = async (req, res = response) => {
       return res.status(400).json({
         success: false,
         message: 'El correo ya se encuentra en uso'
-      })
+      });
     }
 
     const user = new User(req.body);
@@ -27,13 +27,13 @@ const createUser = async (req, res = response) => {
       success: true,
       data: { user, token }
     });
-  } catch(error) {
+  } catch (error) {
     res.status(500).json({
       success: false,
       message: 'No se pudo crear el usuario'
     });
   }
-}
+};
 
 const login = async (req, res = response) => {
   const { email, password } = req.body;
@@ -61,21 +61,24 @@ const login = async (req, res = response) => {
     res.json({
       success: true,
       data: { user: userDB, token }
-    })
-
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,
       message: 'Algo ocurrió, contacte el administrador.'
-    })
+    });
   }
-}
+};
 
-const renewToken = async(req, res = response) => {
+const renewToken = async (req, res = response) => {
+  const uid = req.uid;
+  const token = await createJWT(uid);
+  const user = await User.findById(uid);
+
   res.json({
     success: true,
-    data: req.uid
-  })
-}
+    data: { user, token }
+  });
+};
 
 module.exports = { createUser, login, renewToken };
