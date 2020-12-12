@@ -37,7 +37,7 @@ const createUser = async (req, res = response) => {
 
 const login = async (req, res = response) => {
   const { email, password } = req.body;
-
+  
   try {
     const userDB = await User.findOne({ email });
 
