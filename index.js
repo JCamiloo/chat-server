@@ -16,6 +16,7 @@ const publicPath = path.resolve(__dirname, 'public');
 app.use(express.static(publicPath));
 
 app.use('/api/v1/login', require('./routes/auth'));
+app.use('/api/v1/user', require('./routes/users'));
 
 server.listen(process.env.PORT, (err) => {
   if (err) throw new Error(err);
